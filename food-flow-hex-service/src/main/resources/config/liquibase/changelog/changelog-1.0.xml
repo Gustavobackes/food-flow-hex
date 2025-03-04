@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <!-- Tabela de Clientes -->
+    <changeSet id="1" author="gustavo.backes">
+        <createTable tableName="clientes">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="nome" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Tabela de Produtos -->
+    <changeSet id="2" author="gustavo.backes">
+        <createTable tableName="produtos">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="nome" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="preco" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Tabela de Pedidos -->
+    <changeSet id="3" author="gustavo.backes">
+        <createTable tableName="pedidos">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="cliente_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_pedidos_clientes" references="clientes(id)"/>
+            </column>
+            <column name="status" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data_pedido" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <!-- Tabela de Itens do Pedido -->
+    <changeSet id="4" author="gustavo.backes">
+        <createTable tableName="pedido_itens">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="pedido_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_pedido_itens_pedidos" references="pedidos(id)"/>
+            </column>
+            <column name="produto_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_pedido_itens_produtos" references="produtos(id)"/>
+            </column>
+            <column name="quantidade" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="preco_unitario" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
