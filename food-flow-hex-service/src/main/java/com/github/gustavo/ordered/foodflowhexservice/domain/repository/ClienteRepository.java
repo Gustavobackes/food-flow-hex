@@ -13,4 +13,6 @@ public interface ClienteRepository {
     List<Cliente> findAll();
 
     void deleteById(Long id);
+
+    Cliente update(Cliente clienteUpdate);
 }

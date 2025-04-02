@@ -36,4 +36,9 @@ public class ClienteRepositoryImpl implements ClienteRepository {
         clienteJpaRepository.deleteById(id);
     }
 
+    @Override
+    public Cliente update(Cliente clienteUpdate) {
+        return clienteJpaRepository.save(clienteUpdate);
+    }
+
 }
