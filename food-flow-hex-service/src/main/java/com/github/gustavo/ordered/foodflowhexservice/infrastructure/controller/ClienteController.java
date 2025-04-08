@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/clientes")
 @AllArgsConstructor
@@ -16,6 +18,12 @@ public class ClienteController {
 
     private final CreateClienteUseCase createClienteUseCase;
 
+
+    @GetMapping("/pageable")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ClienteResponse> getAllCliente() {
+        return createClienteUseCase.getAllCliente();
+    }
 
     @GetMapping("/{idCliente}")
     @ResponseStatus(HttpStatus.OK)
@@ -34,6 +42,12 @@ public class ClienteController {
     public ClienteResponse updateCliente(@PathVariable("idCliente") Long idCliente,
                                          @RequestBody @Valid ClienteUpdateRequest clienteUpdateRequest) {
         return createClienteUseCase.updateCliente(idCliente, clienteUpdateRequest);
+    }
+
+    @DeleteMapping("/{idCliente}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCliente(@PathVariable("idCliente") Long idCliente) {
+        createClienteUseCase.deleteCliente(idCliente);
     }
 
 }

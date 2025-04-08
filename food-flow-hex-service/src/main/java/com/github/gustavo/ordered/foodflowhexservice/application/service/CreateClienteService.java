@@ -13,6 +13,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,10 +24,14 @@ public class CreateClienteService implements CreateClienteUseCase {
 
     private final ConversionService conversionService;
 
+
     @Override
-    @Transactional
-    public Long createCliente(ClienteRequest clienteRequest) {
-        return clienteRepository.save(conversionService.convert(clienteRequest, Cliente.class)).getId();
+    @Transactional(readOnly = true) //TODO implementar Pageable
+    public List<ClienteResponse> getAllCliente() {
+        return clienteRepository.findAll()
+                .stream()
+                .map(cliente -> conversionService.convert(cliente, ClienteResponse.class))
+                .toList();
     }
 
     @Override
@@ -38,6 +43,13 @@ public class CreateClienteService implements CreateClienteUseCase {
     }
 
     @Override
+    @Transactional
+    public Long createCliente(ClienteRequest clienteRequest) {
+        return clienteRepository.save(conversionService.convert(clienteRequest, Cliente.class)).getId();
+    }
+
+    @Override
+    @Transactional
     public ClienteResponse updateCliente(Long idCliente, @Valid ClienteUpdateRequest clienteUpdateRequest) {
         Cliente cliente = clienteRepository.findById(idCliente).orElseThrow(() ->
                 new ClienteNotFoundException("Cliente não encontrado"));
@@ -48,6 +60,12 @@ public class CreateClienteService implements CreateClienteUseCase {
         Cliente clienteUpdate = clienteRepository.update(cliente);
 
         return conversionService.convert(clienteUpdate, ClienteResponse.class);
+    }
+
+    @Override
+    @Transactional
+    public void deleteCliente(Long idCliente) {
+        clienteRepository.deleteById(idCliente);
     }
 
 }
