@@ -54,8 +54,8 @@ public class ClienteService implements CreateClienteUseCase {
         Cliente cliente = clienteRepository.findById(idCliente).orElseThrow(() ->
                 new ClienteNotFoundException("Cliente não encontrado"));
 
-        Optional.of(clienteUpdateRequest.getNome()).ifPresent(cliente::setNome);
-        Optional.of(clienteUpdateRequest.getEmail()).ifPresent(cliente::setEmail);
+        Optional.ofNullable(clienteUpdateRequest.getNome()).ifPresent(cliente::setNome);
+        Optional.ofNullable(clienteUpdateRequest.getEmail()).ifPresent(cliente::setEmail);
 
         Cliente clienteUpdate = clienteRepository.update(cliente);
 
