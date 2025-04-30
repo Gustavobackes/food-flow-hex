@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CreateClienteService implements CreateClienteUseCase {
+public class ClienteService implements CreateClienteUseCase {
 
     private final ClienteRepository clienteRepository;
 

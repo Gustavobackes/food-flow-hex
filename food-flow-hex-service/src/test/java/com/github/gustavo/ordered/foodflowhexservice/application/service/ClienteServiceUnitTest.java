@@ -21,10 +21,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class CreateClienteServiceUnitTest {
+class ClienteServiceUnitTest {
 
     @InjectMocks
-    private CreateClienteService createClienteService;
+    private ClienteService clienteService;
 
     @Mock
     private ClienteRepository clienteRepository;
@@ -48,7 +48,7 @@ class CreateClienteServiceUnitTest {
         when(conversionService.convert(clienteRequest, Cliente.class)).thenReturn(cliente);
         when(clienteRepository.save(cliente)).thenReturn(cliente);
 
-        Long createdClienteId = createClienteService.createCliente(clienteRequest);
+        Long createdClienteId = clienteService.createCliente(clienteRequest);
 
         assertNotNull(createdClienteId);
         assertEquals(1L, createdClienteId);
@@ -60,7 +60,7 @@ class CreateClienteServiceUnitTest {
         when(clienteRepository.findAll()).thenReturn(List.of(cliente));
         when(conversionService.convert(cliente, ClienteResponse.class)).thenReturn(clienteResponse);
 
-        List<ClienteResponse> clienteResponses = createClienteService.getAllCliente();
+        List<ClienteResponse> clienteResponses = clienteService.getAllCliente();
 
         assertNotNull(clienteResponses);
         assertEquals(1, clienteResponses.size());
@@ -73,7 +73,7 @@ class CreateClienteServiceUnitTest {
         when(clienteRepository.findById(1L)).thenReturn(Optional.of(cliente));
         when(conversionService.convert(cliente, ClienteResponse.class)).thenReturn(clienteResponse);
 
-        ClienteResponse response = createClienteService.getCliente(1L);
+        ClienteResponse response = clienteService.getCliente(1L);
 
         assertNotNull(response);
         assertEquals(clienteResponse.getNome(), response.getNome());
@@ -84,7 +84,7 @@ class CreateClienteServiceUnitTest {
     void shouldThrowClienteNotFoundExceptionWhenClienteNotFound() {
         when(clienteRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(ClienteNotFoundException.class, () -> createClienteService.getCliente(1L));
+        assertThrows(ClienteNotFoundException.class, () -> clienteService.getCliente(1L));
     }
 
     @Test
@@ -96,7 +96,7 @@ class CreateClienteServiceUnitTest {
         when(conversionService.convert(clienteUpdated, ClienteResponse.class))
                 .thenReturn(new ClienteResponse(clienteUpdated.getNome(), clienteUpdated.getEmail()));
 
-        ClienteResponse updatedResponse = createClienteService.updateCliente(1L, updateRequest);
+        ClienteResponse updatedResponse = clienteService.updateCliente(1L, updateRequest);
 
         assertNotNull(updatedResponse);
         assertEquals("Novo Nome", updatedResponse.getNome());
@@ -108,7 +108,7 @@ class CreateClienteServiceUnitTest {
     void shouldDeleteCliente() {
         doNothing().when(clienteRepository).deleteById(1L);
 
-        createClienteService.deleteCliente(1L);
+        clienteService.deleteCliente(1L);
 
         verify(clienteRepository).deleteById(1L);
     }
